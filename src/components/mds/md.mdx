@@ -1,53 +1,22 @@
-# Markdown (H1)
+## 1. 核心设计理念
+RaUF 的设计基于对雷达物理特性的深入观察 ：
+- 各向异性不确定性 (Anisotropic Uncertainty)： 由于雷达天线数量有限，其方位角（Azimuth）不确定性远高于距离（Range）不确定性，导致测量结果在空间中呈现特征性的“新月形”分布。
+- 多普勒一致性 (Doppler Consistency)： 真实目标的反射符合运动学约束，而杂波或多径效应产生的伪影通常偏离这一规律。
 
-The render result of `md.mdx` is here.
+## 2. 关键技术模块
+### 📊 贝叶斯概率模型 (BPM)
+为了解决稀疏测量导致的“几何推理病态问题” ，RaUF 将任务重新定义为估计定位预测模型 $f_{\theta}(x)$ 和不确定性量化模型 $g_{\varphi}(x)$ 。
+    - 各向异性协方差： 模型在极坐标系下分别预测径向不确定性 $\sigma_{r}$ 和角向不确定性 $\sigma_{\alpha}, \sigma_{\beta}$ 。
+    - 损失函数： 采用负对数似然（NLL）损失，使网络能够学习目标区域内的细粒度置信度分布，而非硬性的确定性映射 。
+### 🔄 双向域注意力融合 (BDAF)
+该模块利用空间结构与多普勒信息之间的互补性来增强特征表示：
+- 第一阶段（空间 ➡️ 多普勒）： 利用空间线索作为查询（Query）来增强多普勒特征，聚焦于与雷达自身运动一致的区域。
+- 第二阶段（多普勒 ➡️ 空间）： 将增强后的多普勒信息投影回空间域，指导空间特征的重建，有效抑制伪影。
+### 📐 视锥体体素化策略 (Frustum-based Voxelization)
+为了有效监督不确定性学习，RaUF 沿雷达射线的距离、方位和俯仰角扩展生成视锥体区域 。所有落入该区域的 LiDAR 点均被视为潜在反射，从而构建出能反映雷达固有测量不确定性的占用真值（Occupancy Ground Truth） 。
 
-## Good (H2)
-
-### Nice (H3)
-
-[**Diffusion models**](https://lilianweng.github.io/posts/2021-07-11-diffusion-models/) are a class of generative models in machine learning that have gained significant attention in recent years. 
-
-**Text-to-image diffusion models** have various application scenarios, including:
-
-- **Art & Design**: Used by artists for creative art and fashion designers to generate clothing renderings.
-- **Advertising & Marketing**: Helps in creating advertising posters and product promotion maps.
-- **Game & Film**: Applied in game scene and character design, as well as film and television concept design...
-
-> Thegeneral training steps of diffusion models are as follows:
-
-1. Data collection
-2. Noise addition
-3. Model building
-4. Training
-5. Evaluation
-6. Deployment
-
-
-```
-import torch 
-
-def denoise():
-    pass
-```
-
-* [ ] to do
-* [x] done
-* [x] ~114514~
-
-![](./logo_vision_aigc.png)
-
-Lift ($$L$$) can be determined by Lift Coefficient ($$C_L$$) like the following
-equation.
-
-$$
-L = \frac{1}{2} \rho v^2 S C_L
-$$
-
-
-### Table (H3)
-
-| a       | b       | c     |  d      |
-| -       | :-      | -:    | :-:     |
-| Alpha   | Bravo   | Alpha | Bravo   |
-| 中文    | Charlie | 👩‍❤️‍👩    | Delta   |
+## 3. Performance
+![](./gallery2.png)
+Bird's-Eye View visualization of Radar point clouds augmented by various models and LiDAR ground truth.
+#### The visualization of spatial perception with uncertainty 
+![](./gallery_arxiv.jpg)

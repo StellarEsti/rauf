@@ -22,20 +22,20 @@ export default {
     Title,
     Abstract,
     Markdown,
-    BibTeX,
-    Carousel,
+    // BibTeX,
+    // Carousel,
     Video,
-    ImageSlider,
-    ImageSliderInner,
-    ImageSelector,
-    Echart,
-    Collapse,
-    Table,
-    SeletionForComparison,
-    Comment,
-    Latex,
-    Model3D,
-    GaussianSplats3D
+    // ImageSlider,
+    // ImageSliderInner,
+    // ImageSelector,
+    // Echart,
+    // Collapse,
+    // Table,
+    // SeletionForComparison,
+    // Comment,
+    // Latex,
+    // Model3D,
+    // GaussianSplats3D
   }
 }
 </script>
@@ -57,5 +57,5 @@ export default {
   <ImageSlider/>
   <ImageSelector/>
   <BibTeX/>
-  <Comment/>
+  <!-- <Comment/> -->
 </template>

@@ -3,11 +3,11 @@ export default {
   data() {
     return {
       bibtex: [
-        "@article{junyaohu2023template,",
-        "    title={Academic Project Page Template Vue},",
-        "    author={Hu, Junyao},",
-        "    journal={GitHub},",
-        "    year={2023}",
+        "@article{shengpengwang2026rauf,",
+        "    title={RaUF: Learning the Spatial Uncertainty Field of Radar},",
+        "    author={Wang, Shengpeng and Wang, Guangyu and Wang, Wei},",
+        "    booktitle={2025 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},",
+        "    year={2026}",
         "}",
       ],
     }
