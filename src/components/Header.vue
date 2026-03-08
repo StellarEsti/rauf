@@ -6,7 +6,7 @@ import { HomeFilled, SuccessFilled } from '@element-plus/icons-vue'
 // 个人主页
 const home = {
     name: "My Blog",
-    link: "https://junyaohu.github.io/",
+    link: "https://shengpeng.wang/",
 }
 
 // 项目主页
@@ -70,6 +70,8 @@ const more_paper = {
             </el-menu-item>
         </el-sub-menu>
 
+                <!-- 主题按钮已移至 Title.vue（位于标题下方） -->
+
     </el-menu>
     </el-affix>
 </template>
@@ -97,6 +99,8 @@ const more_paper = {
 .el-header {
     --el-header-height: 50px;
 }
+
+/* theme controls removed from header; kept in Title.vue */
 
 </style>
 

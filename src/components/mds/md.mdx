@@ -1,19 +1,21 @@
-## 1. 核心设计理念
-RaUF 的设计基于对雷达物理特性的深入观察 ：
-- 各向异性不确定性 (Anisotropic Uncertainty)： 由于雷达天线数量有限，其方位角（Azimuth）不确定性远高于距离（Range）不确定性，导致测量结果在空间中呈现特征性的“新月形”分布。
-- 多普勒一致性 (Doppler Consistency)： 真实目标的反射符合运动学约束，而杂波或多径效应产生的伪影通常偏离这一规律。
+## 1. Core Design Principles
+The design of RaUF is motivated by key physical characteristics of radar sensing:
+- Anisotropic Uncertainty: Due to the limited number of radar antennas, azimuth uncertainty is substantially larger than range uncertainty, yielding a characteristic crescent-shaped spatial distribution of measurements.
+- Doppler Consistency: Reflections from true targets satisfy kinematic constraints, whereas artifacts induced by clutter or multipath effects typically deviate from these constraints.
 
-## 2. 关键技术模块
-### 📊 贝叶斯概率模型 (BPM)
-为了解决稀疏测量导致的“几何推理病态问题” ，RaUF 将任务重新定义为估计定位预测模型 $f_{\theta}(x)$ 和不确定性量化模型 $g_{\varphi}(x)$ 。
-    - 各向异性协方差： 模型在极坐标系下分别预测径向不确定性 $\sigma_{r}$ 和角向不确定性 $\sigma_{\alpha}, \sigma_{\beta}$ 。
-    - 损失函数： 采用负对数似然（NLL）损失，使网络能够学习目标区域内的细粒度置信度分布，而非硬性的确定性映射 。
-### 🔄 双向域注意力融合 (BDAF)
-该模块利用空间结构与多普勒信息之间的互补性来增强特征表示：
-- 第一阶段（空间 ➡️ 多普勒）： 利用空间线索作为查询（Query）来增强多普勒特征，聚焦于与雷达自身运动一致的区域。
-- 第二阶段（多普勒 ➡️ 空间）： 将增强后的多普勒信息投影回空间域，指导空间特征的重建，有效抑制伪影。
-### 📐 视锥体体素化策略 (Frustum-based Voxelization)
-为了有效监督不确定性学习，RaUF 沿雷达射线的距离、方位和俯仰角扩展生成视锥体区域 。所有落入该区域的 LiDAR 点均被视为潜在反射，从而构建出能反映雷达固有测量不确定性的占用真值（Occupancy Ground Truth） 。
+## 2. Key Technical Modules
+### Bayesian Probabilistic Model (BPM)
+To address the ill-posed geometric inference caused by sparse measurements, RaUF reformulates the task as jointly estimating a localization predictor $f_{\theta}(x)$ and an uncertainty quantification model $g_{\varphi}(x)$.
+- Anisotropic Covariance: In polar coordinates, the model predicts radial uncertainty $\sigma_{r}$ and angular uncertainties $\sigma_{\alpha}, \sigma_{\beta}$.
+- Loss Function: A negative log-likelihood (NLL) objective is adopted to learn fine-grained confidence distributions in target regions, rather than enforcing a rigid deterministic mapping.
+
+### Bidirectional Domain Attention Fusion (BDAF)
+This module exploits the complementarity between spatial structure and Doppler information to strengthen feature representations:
+- Stage 1 (Spatial to Doppler): Spatial cues are used as queries to enhance Doppler features, emphasizing regions consistent with radar ego-motion.
+- Stage 2 (Doppler to Spatial): The enhanced Doppler information is projected back to the spatial domain to guide spatial feature reconstruction and effectively suppress artifacts.
+
+### Frustum-based Voxelization Strategy
+To provide effective supervision for uncertainty learning, RaUF expands frustum regions along radar rays in range, azimuth, and elevation dimensions. All LiDAR points falling within each frustum are treated as potential reflections, enabling the construction of occupancy ground truth that captures intrinsic radar measurement uncertainty.
 
 ## 3. Performance
 ![](./gallery2.png)

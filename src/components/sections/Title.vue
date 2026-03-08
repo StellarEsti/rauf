@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { ElIcon } from 'element-plus'
 import { Document, Files, MagicStick, Picture, DataAnalysis, Film } from '@element-plus/icons-vue'
 
@@ -9,14 +10,52 @@ const logo = './CVPR_Denver_2026.jpg'
 // 标题
 const title = 'RaUF: Learning the Spatial Uncertainty Field of Radar'
 
-// 标题颜色
-const title_color = '#000000'
+// 标题颜色（响应主题）
+const title_color = ref('#e3f0ff')
 
 // 标题补充，没有则置为''即可
 const title_supp = ' (CVPR 2026)'
 
-// 标题补充颜色
-const title_supp_color = '#42B883'
+const THEME_KEY = 'site-theme'
+const currentTheme = ref<'light' | 'dark'>('light')
+
+function applyTitleColorForTheme(t: string) {
+  if (t === 'dark') title_color.value = '#e6eef8'
+  else title_color.value = '#0b1725'
+}
+
+function applyThemeState(t: string) {
+  const normalized = t === 'dark' ? 'dark' : 'light'
+  currentTheme.value = normalized
+  applyTitleColorForTheme(normalized)
+}
+
+function themeChangedHandler(e: any) {
+  const t = e?.detail || localStorage.getItem(THEME_KEY) || (document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light')
+  applyThemeState(t)
+}
+
+function setTheme(t: 'light'|'dark'){
+  try{ localStorage.setItem(THEME_KEY, t) }catch(e){}
+  try{ document.documentElement.setAttribute('data-theme', t) }catch(e){}
+  window.dispatchEvent(new CustomEvent('theme-changed', { detail: t }))
+}
+
+function toggleTheme() {
+  setTheme(currentTheme.value === 'dark' ? 'light' : 'dark')
+}
+
+onMounted(() => {
+  // initialize from body or localStorage
+  const saved = localStorage.getItem(THEME_KEY)
+  const initial = saved || (document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light')
+  applyThemeState(initial)
+  window.addEventListener('theme-changed', themeChangedHandler)
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('theme-changed', themeChangedHandler)
+})
 
 // 按钮颜色
 const btn_color = '#444444'
@@ -30,7 +69,7 @@ const authors = [
     address_flag: "1"
   },
   {
-    name: "Guangyu Wang",
+    name: "Kuangyu Wang",
     icon: "./icon/2026_PhD_KuangyuWang.png",
     homepage: "https://metaiot.group/team/",
     address_flag: "1"
@@ -128,8 +167,25 @@ const buttons = [
       <el-col :span="20">
         <h1 class="paper-title">
           <span v-if="title" :style="{color:title_color}"> {{ title }}</span>
-          <span v-if="title_supp" :style="{color:title_supp_color}"> {{ title_supp }}</span>
+          <span v-if="title_supp" style="color: #20bf15 !important;"> {{ title_supp }}</span>
         </h1>
+      </el-col>
+    </el-row>
+
+    <!-- 主题切换开关：居中，位于标题下方 -->
+    <el-row justify="center" class="theme-switch-row">
+      <el-col :span="20" class="title-theme-controls">
+        <button
+          class="theme-toggle"
+          type="button"
+          @click="toggleTheme"
+          :aria-label="`Switch to ${currentTheme === 'dark' ? 'light' : 'dark'} mode`"
+        >
+          <span class="theme-track" :class="{ dark: currentTheme === 'dark' }">
+            <span class="theme-thumb"></span>
+          </span>
+        </button>
+        <span class="theme-mode-label">Light Mode</span>
       </el-col>
     </el-row>
 
@@ -267,6 +323,8 @@ const buttons = [
 
 .el-alert {
   margin: 10px 0 0;
+  background-color: #d8eed1 !important;
+  border-color: #d8eed1 !important;
 }
 
 .el-alert:first-child {
@@ -295,6 +353,70 @@ const buttons = [
 .logo:hover {
   transform: translateY(-4px) scale(1.03);
   box-shadow: 0 14px 34px rgba(0,0,0,0.12), 0 4px 10px rgba(0,0,0,0.06);
+}
+
+.title-theme-controls{
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  gap: 10px;
+}
+
+.theme-switch-row {
+  margin-bottom: 14px;
+}
+
+.theme-toggle {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.theme-track {
+  width: 78px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  padding: 4px;
+  border-radius: 999px;
+  background: #20bf15;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12), 0 8px 20px rgba(15, 23, 42, 0.1);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.theme-track.dark {
+  background: #515953;
+  box-shadow: inset 0 0 0 1px rgba(203, 213, 225, 0.2), 0 10px 22px rgba(2, 6, 23, 0.35);
+}
+
+.theme-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: inline-block;
+  background: #cbcfc4;
+  box-shadow: 0 3px 10px rgba(2, 6, 23, 0.18);
+  transform: translateX(0);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.theme-track.dark .theme-thumb {
+  transform: translateX(42px);
+  background: #cbcfc4;
+}
+
+.theme-mode-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-color);
+  transition: color 0.25s ease;
+}
+
+.theme-toggle:focus-visible .theme-track {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
 }
 
 @media (max-width: 600px) {

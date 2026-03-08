@@ -22,7 +22,7 @@ export default {
     Title,
     Abstract,
     Markdown,
-    // BibTeX,
+    BibTeX,
     // Carousel,
     Video,
     // ImageSlider,

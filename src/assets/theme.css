@@ -1,0 +1,75 @@
+:root{
+  --bg: #ffffff;
+  --text-color: #111827;
+  --muted: #6b7280;
+  --card-bg: #ffffff;
+  --border-color: rgba(0,0,0,0.08);
+}
+
+[data-theme="dark"]{
+  --bg: #0b0c0f;
+  --text-color: #e5e7eb;
+  --muted: #9ca3af;
+  --card-bg: #0f1114;
+  --border-color: rgba(255,255,255,0.06);
+}
+
+html, body {
+  background: var(--bg) !important;
+  color: var(--text-color) !important;
+}
+
+/* Element Plus tweaks: make containers inherit our vars */
+.el-container, .el-main, .el-header, .el-footer {
+  background: transparent;
+  color: inherit;
+}
+
+.site-card {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 14px;
+}
+
+.site-muted {
+  color: var(--muted);
+}
+
+/* More global overrides to ensure components follow theme variables */
+pre, code, blockquote, p, li {
+  color: var(--text-color) !important;
+}
+
+pre, pre code {
+  background: rgba(0,0,0,0.04);
+}
+
+body[data-theme="dark"] pre, body[data-theme="dark"] pre code {
+  background: rgba(255,255,255,0.03) !important;
+}
+
+.paper-title span { color: var(--text-color) !important; }
+
+.guidance-button {
+  background: linear-gradient(180deg,var(--card-bg),var(--card-bg));
+  box-shadow: 0 6px 18px rgba(2,6,23,0.08);
+}
+
+.logo, .site-card { background: var(--card-bg) !important; }
+
+/* Ensure Element Plus buttons' text follows theme */
+.el-button, .btn-text { color: var(--btn-text) !important; }
+
+/* Alerts */
+.el-alert { background: transparent !important; }
+
+/* Video block fallback: use card background */
+html[data-theme="light"] .video-block{ background: linear-gradient(180deg,var(--card-bg),#fff); }
+html[data-theme="dark"] .video-block{ background: linear-gradient(180deg,var(--card-bg),#041323); }
+
+/* Hide section divider lines in dark theme */
+html[data-theme="dark"] .el-divider {
+  border-top-color: transparent !important;
+}

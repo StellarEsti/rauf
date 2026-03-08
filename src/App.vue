@@ -14,10 +14,13 @@ export default {
 
 </script>
 
+<!-- theme initialization is handled in src/main.js and theme.css -->
+
 <template>
     <div>
       
       <el-container>
+        <!-- header hidden — theme controls moved to Title.vue -->
         <!-- <el-header><Header/></el-header> -->
         <el-main><Main/></el-main>
         <!-- <el-footer><Footer/></el-footer> -->
@@ -152,3 +155,4 @@ th, td {
 }
 
 </style>
+
