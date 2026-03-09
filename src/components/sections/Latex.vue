@@ -34,7 +34,7 @@ export default defineComponent({
           <p><em>Proof.</em></p>
           
           <figure style="text-align: center; margin: 30px 0;">
-            <img src="doppler.png" alt="Doppler-Consistency for stationary positive scatters" style="max-width: 100%; height: auto;" />
+            <img src="/doppler.png" alt="Doppler-Consistency for stationary positive scatters" style="max-width: 100%; height: auto;" />
             <figcaption style="margin-top: 10px; font-size: 14px; color: #666;">
               Fig. 1: Doppler-Consistency for stationary positive scatters.
             </figcaption>
