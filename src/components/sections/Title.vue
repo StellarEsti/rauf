@@ -88,13 +88,13 @@ const addresses = [
     address_flag: "1",
     name: "Huazhong University of Science and Technology",
     icon: "./icon/hust.png",
-    homepage: "https://github.com/hmuniversity"
+    homepage: "https://hust.edu.cn/",
   },
   {
     address_flag: "2",
     name: "Wuhan University",
     icon: "./icon/whu.png",
-    homepage: "https://www.bilibili.com/video/BV178411Y7QB"
+    homepage: "https://whu.edu.cn/",
   },
 ]
 
@@ -107,7 +107,7 @@ const news = "🔥 [2024-12-15] This project is still under development."
 
 // 强调内容
 const emphases = [
-  "🎉 [CVPR 2026] Poster",
+  "🎉 [CVPR 2026] ",
   "🥰 欢迎关注“metaiot”微信公众号",
   // "传递人工智能算法科普教育的减约理解",
   // "提升信息效率及认知维度"
@@ -116,8 +116,9 @@ const emphases = [
 // 提供引导资料链接
 const buttons = [
   {
-    disabled: true,
+    disabled: false,
     name: "Paper",
+    link: "https://arxiv.org/abs/2603.01026",
     component: Document,
   },
   {
@@ -141,6 +142,12 @@ const buttons = [
     disabled: true,
     name: "Slide",
     component: DataAnalysis,
+  },
+  {
+    disabled: false,
+    name: "Supplementary",
+    link: "#Supplementary",
+    component: Film,
   },
 
 ]
